@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.vant_demo_success.dao.UserInfoDOMapper">
+
+  <resultMap id="BaseResultMap" type="com.example.vant_demo_success.dataobject.UserInfoDO">
+
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="telephone" jdbcType="VARCHAR" property="telephone" />
+    <result column="sex" jdbcType="VARCHAR" property="sex" />
+    <result column="age" jdbcType="VARCHAR" property="age" />
+    <result column="birthday" jdbcType="VARCHAR" property="birthday" />
+    <result column="image_url" jdbcType="VARCHAR" property="image_url" />
+    <result column="payPWD" jdbcType="VARCHAR" property="payPWD" />
+  </resultMap>
+
+
+  <resultMap id="PayMap" type="com.example.vant_demo_success.dataobject.UserPayPasswordDO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="payPWD" jdbcType="VARCHAR" property="payPWD" />
+  </resultMap>
+
+  <sql id="PayPwd_List">
+    id, username, payPWD
+  </sql>
+
+  <sql id="Base_Column_List">
+    id, username, password, telephone, sex, age, birthday, image_url,payPWD
+  </sql>
+
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="initUsers" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user_info
+  </select>
+  <select id="searchUsers" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user_info
+    where username like '%${content}%'
+  </select>
+
+
+
+  <!-- 根据 Username 查找  -->
+  <select id="selectByUserName" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user_info
+    where username = #{username,jdbcType=VARCHAR}
+  </select>
+
+  <!-- 根据 id 查找支付密码  -->
+  <select id="selectPayPWDByUserID" resultMap="PayMap">
+    select
+    <include refid="PayPwd_List" />
+    from user_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <!-- 根据 Telphone 查找  -->
+  <select id="selectByTelephone" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user_info
+    where telephone = #{telephone,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+
+    delete from user_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.example.vant_demo_success.dataobject.UserInfoDO">
+
+    insert into user_info (id, username, password, telephone, sex, age, birthday, image_url
+      )
+    values (#{id,jdbcType=INTEGER},
+     #{username,jdbcType=VARCHAR},
+      #{password,jdbcType=VARCHAR},
+       #{telephone,jdbcType=VARCHAR},
+        #{sex,jdbcType=VARCHAR},
+         #{age,jdbcType=VARCHAR},
+         #{birthday,jdbcType=VARCHAR},
+         #{image_url,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" keyProperty="id" parameterType="com.example.vant_demo_success.dataobject.UserInfoDO" useGeneratedKeys="true">
+
+    insert into user_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="telephone != null">
+        telephone,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="age != null">
+        age,
+      </if>
+      <if test="birthday != null">
+        birthday,
+      </if>
+      <if test="image_url != null">
+        image_url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null">
+        #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null">
+        #{age,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null">
+        #{birthday,jdbcType=VARCHAR},
+      </if>
+      <if test="image_url != null">
+        #{image_url,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.vant_demo_success.dataobject.UserInfoDO">
+
+    update user_info
+    <set>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null">
+        telephone = #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null">
+        age = #{age,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null">
+        birthday = #{birthday,jdbcType=VARCHAR},
+      </if>
+      <if test="image_url != null">
+        #{image_url,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <update id="saveUser" parameterType="com.example.vant_demo_success.dataobject.UserInfoDO">
+
+    update user_info
+    <set>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null">
+        telephone = #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null">
+        age = #{age,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null">
+        birthday = #{birthday,jdbcType=VARCHAR},
+      </if>
+
+      <if test="image_url != null">
+        image_url = #{image_url,jdbcType=VARCHAR},
+      </if>
+
+      <if test="payPWD != null">
+        payPWD = #{payPWD,jdbcType=VARCHAR},
+      </if>
+
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+  <update id="delUserImgPath">
+
+    update user_info
+    <set>
+      <if test="userid != null">
+        image_url = ""
+      </if>
+    </set>
+    where id = #{userid,jdbcType=INTEGER}
+  </update>
+
+
+
+
+  <update id="updateByPrimaryKey" parameterType="com.example.vant_demo_success.dataobject.UserInfoDO">
+
+    update user_info
+    set username = #{username,jdbcType=VARCHAR},
+    password = #{password,jdbcType=VARCHAR},
+    telephone = #{telephone,jdbcType=VARCHAR},
+    sex = #{sex,jdbcType=VARCHAR},
+    age = #{age,jdbcType=VARCHAR},
+    birthday = #{birthday,jdbcType=VARCHAR},
+    image_url = #{image_url,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateUserName">
+
+    update user_info
+    <set>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateUserSex">
+
+    update user_info
+    <set>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateUserBirthday">
+
+    update user_info
+    <set>
+      <if test="birthday != null">
+        birthday = #{birthday,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+
+
+  <update id="updatePayPwdByUserID">
+
+    update user_info
+    <set>
+      <if test="payPwd != null">
+        payPWD = #{payPwd,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{userID,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateUserImgPath">
+
+    update user_info
+    <set>
+      <if test="imgPath != null">
+        image_url = #{imgPath,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{userid,jdbcType=INTEGER}
+  </update>
+</mapper>

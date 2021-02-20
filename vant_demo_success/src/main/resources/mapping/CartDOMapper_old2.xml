@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.vant_demo_success.dao.CartDOMapper_old2">
+
+  <resultMap id="BaseResultMap" type="com.example.vant_demo_success.dataobject.CartDO_old2">
+    <id column="userId" jdbcType="INTEGER" property="userid" />
+    <result column="goodDetail" jdbcType="LONGVARCHAR" property="gooddetail" />
+  </resultMap>
+
+
+  <sql id="Base_Column_List">
+    userId, goodDetail
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+
+    select
+    <include refid="Base_Column_List" />
+
+    from cart
+    where userId = #{userid,jdbcType=INTEGER}
+  </select>
+
+  <select id="getByUserId" resultMap="BaseResultMap">
+
+    select
+    <include refid="Base_Column_List" />
+    from cart
+    where userId = #{userId,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+
+    delete from cart
+    where userId = #{userid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.example.vant_demo_success.dataobject.CartDO_old2">
+
+    insert into cart (userId, goodDetail)
+    values (#{userid,jdbcType=INTEGER}, #{gooddetail,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.vant_demo_success.dataobject.CartDO_old2">
+
+    insert into cart
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userid != null">
+        userId,
+      </if>
+      <if test="gooddetail != null">
+        goodDetail,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userid != null">
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="gooddetail != null">
+        #{gooddetail,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.vant_demo_success.dataobject.CartDO_old2">
+
+    update cart
+    <set>
+      <if test="gooddetail != null">
+        goodDetail = #{gooddetail,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where userId = #{userid,jdbcType=INTEGER}
+  </update>
+
+  <update id="setUserCart">
+
+    update cart
+    <set>
+      <if test="cartList != null">
+        goodDetail = #{cartList,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where userId = #{userId,jdbcType=INTEGER}
+  </update>
+
+
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.example.vant_demo_success.dataobject.CartDO_old2">
+
+    update cart
+    set goodDetail = #{gooddetail,jdbcType=LONGVARCHAR}
+    where userId = #{userid,jdbcType=INTEGER}
+  </update>
+
+
+
+  <insert id="initCart" parameterType="com.example.vant_demo_success.dataobject.CartDO_old2">
+
+    insert into cart
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userid != null">
+        userId,
+      </if>
+      <if test="gooddetail != null">
+        goodDetail,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userid != null">
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="gooddetail != null">
+        #{gooddetail,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>

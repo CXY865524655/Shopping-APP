@@ -1,0 +1,50 @@
+ ~  根路径
+systemctl start mariadb.service   启动mysql服务
+ps -ef | grep mysql                     查看mysql是否开启
+netstat -anp | grep 3306             查看3306端口
+mysqladmin -u root password root     初始化mysql 的 用户 root  密码为 root
+drop database name    删除数据库
+
+退出mysql操作
+1、导出数据和表结构：
+mysqldump -u用户名 -p密码 数据库名 > 数据库名.sql
+2、只导出表结构
+mysqldump -u用户名 -p密码 -d 数据库名 > 数据库名.sql
+#/usr/local/mysql/bin/   mysqldump -uroot -p -d abc > abc.sql
+
+阿里云esc 下载 文件到本地
+工具SecureCRT -》 选项 - 会话选项 - Xmodem/Zmodem 设置下载上传的本地地址
+sz filename 下载到设置的地址中
+
+pscp C:\Users\cxy\Desktop\vant_demo_success-0.0.1-SNAPSHOT.jar root@47.112.190.111:/tmp/
+
+复制springboot后mybatis插件重新生成再zan代码
+
+source //tmp/vant_demo_success.sql   // 连接mysql后导入sql文件
+
+Navicat for MySQL导出的不是数据库，而是数据库中的所有表的数据以及结构。
+所以，如果你不建立与之对应的数据库，而是随便找一个数据导入，
+结果是这个数据库多了几张刚刚导入的表。
+
+chmod 777 文件名 给文件赋予权限  
+
+rm -rf 文件路径          // 删除文件，linux没有回收站
+进入到和src同级目录执行
+mvn clean package 完成打包后可以在target 中找到jar包
+
+java -jar 文件名.jar    运行 jar 包
+
+新买的阿里云服务器没有配置端口允许， 需要自己设置安全组   前端才能访问到阿里云服务器
+
+新打包的app hbuilderx 要新建一个项目
+
+pscp E:\tmp\apache-tomcat-8.5.14.tar.gz root@120.76.137.194:/home/tmp 传文件
+
+springboot 突然启动不了： 因为mybatis-generator.xml 中的table没有注释掉导致运行时
+mapping中的table重新生成，代码重叠，此时把mapping中的文件中的 
+两个id="BaseResultMap"之间的代码（即重新生成的代码）删除
+
+
+
+
+

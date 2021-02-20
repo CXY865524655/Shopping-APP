@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.vant_demo_success.dao.CategoryDOMapper">
+
+  <resultMap id="BaseResultMap" type="com.example.vant_demo_success.dataobject.CategoryDO">
+
+    <id column="categoryId" jdbcType="INTEGER" property="categoryid" />
+    <result column="categoryName" jdbcType="VARCHAR" property="categoryname" />
+    <result column="image" jdbcType="VARCHAR" property="image" />
+  </resultMap>
+  <sql id="Base_Column_List">
+
+    categoryId, categoryName, image
+  </sql>
+  <select id="select" resultMap="BaseResultMap">
+
+    select
+    <include refid="Base_Column_List" />
+    from category
+  </select>
+
+
+
+  <select id="getCategory" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from category
+    LIMIT #{num, jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+
+    select
+    <include refid="Base_Column_List" />
+    from category
+    where categoryId = #{categoryid,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectCategoryList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from category
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+
+    delete from category
+    where categoryId = #{categoryid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.example.vant_demo_success.dataobject.CategoryDO">
+
+    insert into category (categoryId, categoryName, image
+      )
+    values (#{categoryid,jdbcType=INTEGER}, #{categoryname,jdbcType=VARCHAR}, #{image,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.vant_demo_success.dataobject.CategoryDO">
+
+    insert into category
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="categoryid != null">
+        categoryId,
+      </if>
+      <if test="categoryname != null">
+        categoryName,
+      </if>
+      <if test="image != null">
+        image,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="categoryid != null">
+        #{categoryid,jdbcType=INTEGER},
+      </if>
+      <if test="categoryname != null">
+        #{categoryname,jdbcType=VARCHAR},
+      </if>
+      <if test="image != null">
+        #{image,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.vant_demo_success.dataobject.CategoryDO">
+
+    update category
+    <set>
+      <if test="categoryname != null">
+        categoryName = #{categoryname,jdbcType=VARCHAR},
+      </if>
+      <if test="image != null">
+        image = #{image,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where categoryId = #{categoryid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.vant_demo_success.dataobject.CategoryDO">
+
+    update category
+    set categoryName = #{categoryname,jdbcType=VARCHAR},
+      image = #{image,jdbcType=VARCHAR}
+    where categoryId = #{categoryid,jdbcType=INTEGER}
+  </update>
+</mapper>

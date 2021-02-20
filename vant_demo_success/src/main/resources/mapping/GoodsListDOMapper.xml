@@ -1,0 +1,507 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.vant_demo_success.dao.GoodsListDOMapper">
+
+  <resultMap id="BaseResultMap" type="com.example.vant_demo_success.dataobject.GoodsListDO">
+
+    <id column="goodsId" jdbcType="INTEGER" property="goodsid" />
+    <result column="goodsName" jdbcType="VARCHAR" property="goodsname" />
+    <result column="image" jdbcType="VARCHAR" property="image" />
+    <result column="mallPrice" jdbcType="DECIMAL" property="mallprice" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="assess" jdbcType="DECIMAL" property="assess" />
+    <result column="sales" jdbcType="INTEGER" property="sales" />
+    <result column="goods_type" jdbcType="INTEGER" property="goodsType" />
+    <result column="sub_type" jdbcType="INTEGER" property="subType" />
+    <result column="details" jdbcType="VARCHAR" property="details" />
+    <result column="stock" jdbcType="INTEGER" property="stock" />
+    <result column="describes" jdbcType="VARCHAR" property="describes" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    goodsId, goodsName, image, mallPrice,
+    price, assess, sales, goods_type, sub_type,
+    details, stock, describes
+  </sql>
+
+
+  <select id="initAdminGoods" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from goods_list
+  </select>
+
+  <select id="getGoodPrice" resultType="java.lang.Integer">
+    select
+    goodsId
+    from (
+    select
+    goodsId
+    from goods_list
+    where
+    price-mallPrice&gt;0
+    )
+    as a
+    ORDER BY RAND() LIMIT 5
+  </select>
+
+  <select id="adminSearchGoods" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from
+    goods_list
+    where
+    goodsName like '%${content}%'
+  </select>
+
+  <select id="searchGoods1" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from
+    goods_list
+    where
+    goodsName like '%${searchContent}%'
+    order by mallPrice
+  </select>
+  <select id="searchGoods2" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from
+    goods_list
+    where
+    goodsName like '%${searchContent}%'
+    order by mallPrice desc
+  </select>
+  <select id="searchGoods3" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from
+    goods_list
+    where
+    goodsName like '%${searchContent}%'
+    order by sales desc
+  </select>
+  <select id="searchGoods4" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from
+    goods_list
+    where
+    goodsName like '%${searchContent}%'
+    order by assess desc
+  </select>
+
+
+  <select id="getGoodImgPath" resultType="java.lang.String">
+    select
+    image
+    from goods_list
+    where
+    goodsId = #{goodsid,jdbcType=INTEGER}
+  </select>
+
+  <select id="getGoodImgPathDetail" resultType="java.lang.String">
+    select
+    details
+    from goods_list
+    where
+    goodsId = #{goodsid,jdbcType=INTEGER}
+  </select>
+
+
+  <select id="getHeaderSwipes" resultType="java.lang.Integer">
+    select
+    goodsId
+    from goods_list
+    ORDER BY RAND() LIMIT 5
+  </select>
+  <select id="getRecommends" resultType="java.lang.Integer">
+    select
+    goodsId
+    from goods_list
+    ORDER BY RAND() LIMIT 5
+  </select>
+
+
+
+  <!-- 获取子标签的 Goods 列表 -->
+  <select id="getSubProductList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from goods_list
+    where
+    goods_type = #{goods_type,jdbcType=INTEGER} and
+    sub_type = #{sub_type,jdbcType=INTEGER}
+  </select>
+  <!-- 获取子标签的 Goods 列表 -->
+  <select id="selectByCollectArray" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from goods_list
+    where
+    goodsId
+    IN
+    <foreach close=")" collection="goodIds" index="index" item="id" open="(" separator=",">
+      #{id}
+    </foreach>
+  </select>
+  <!-- 获取子标签的 Cart 列表 -->
+  <select id="selectByCartArray" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from goods_list
+    where
+    goodsId
+    IN
+    <foreach close=")" collection="goodIds" index="index" item="id" open="(" separator=",">
+      #{id}
+    </foreach>
+  </select>
+
+
+
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+
+    select
+    <include refid="Base_Column_List" />
+    from goods_list
+    where goodsId = #{goodsid,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByGoodsId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+
+    select
+    <include refid="Base_Column_List" />
+    from goods_list
+    where goodsId = #{goodsid,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectRecommendGoods" resultMap="BaseResultMap">
+
+    select
+    <include refid="Base_Column_List" />
+    from goods_list
+  </select>
+
+  <select id="selectHotSelling" resultMap="BaseResultMap">
+
+    select
+    <include refid="Base_Column_List" />
+    from goods_list
+  </select>
+
+  <select id="selectFloors" resultMap="BaseResultMap">
+
+    select
+    <include refid="Base_Column_List" />
+    from goods_list
+    where goods_type = #{goodsType, jdbcType=INTEGER}
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+
+    delete from goods_list
+    where goodsId = #{goodsid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.example.vant_demo_success.dataobject.GoodsListDO">
+
+    insert into goods_list (
+      goodsId, goodsName, image,
+      mallPrice, price, assess,
+      sales, goods_type, details,
+      stock, describes)
+    values (#{goodsid,jdbcType=INTEGER}, #{goodsname,jdbcType=VARCHAR}, #{image,jdbcType=VARCHAR},
+      #{mallprice,jdbcType=DECIMAL}, #{price,jdbcType=DECIMAL}, #{assess,jdbcType=DECIMAL},
+      #{sales,jdbcType=INTEGER}, #{goods_type,jdbcType=INTEGER}, #{sub_type,jdbcType=INTEGER},
+      #{details,jdbcType=VARCHAR}, #{stock,jdbcType=INTEGER},#{describes,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.vant_demo_success.dataobject.GoodsListDO">
+
+    insert into goods_list
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="goodsid != null">
+        goodsId,
+      </if>
+      <if test="goodsname != null">
+        goodsName,
+      </if>
+      <if test="image != null">
+        image,
+      </if>
+      <if test="mallprice != null">
+        mallPrice,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="assess != null">
+        assess,
+      </if>
+      <if test="sales != null">
+        sales,
+      </if>
+      <if test="goods_type != null">
+        goods_type,
+      </if>
+      <if test="sub_type != null">
+        sub_type,
+      </if>
+      <if test="details != null">
+        details,
+      </if>
+      <if test="stock != null">
+        stock,
+      </if>
+      <if test="describes != null">
+        describes,
+      </if>
+
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="goodsid != null">
+        #{goodsid,jdbcType=INTEGER},
+      </if>
+      <if test="goodsname != null">
+        #{goodsname,jdbcType=VARCHAR},
+      </if>
+      <if test="image != null">
+        #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="mallprice != null">
+        #{mallprice,jdbcType=DECIMAL},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="assess != null">
+        #{assess,jdbcType=DECIMAL},
+      </if>
+      <if test="sales != null">
+        #{sales,jdbcType=INTEGER},
+      </if>
+      <if test="goods_type != null">
+        #{goods_type,jdbcType=INTEGER},
+      </if>
+      <if test="sub_type != null">
+        #{subType,jdbcType=INTEGER},
+      </if>
+      <if test="details != null">
+        #{details,jdbcType=VARCHAR},
+      </if>
+      <if test="stock != null">
+        #{stock,jdbcType=INTEGER},
+      </if>
+      <if test="describes != null">
+        #{describes,jdbcType=VARCHAR},
+      </if>
+
+    </trim>
+  </insert>
+  <insert id="addGood" keyProperty="goodsId" parameterType="com.example.vant_demo_success.dataobject.GoodsListDO" useGeneratedKeys="true">
+
+    insert into goods_list
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="goodsid != null">
+        goodsId,
+      </if>
+      <if test="goodsname != null">
+        goodsName,
+      </if>
+      <if test="image != null">
+        image,
+      </if>
+      <if test="mallprice != null">
+        mallPrice,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="assess != null">
+        assess,
+      </if>
+      <if test="sales != null">
+        sales,
+      </if>
+      <if test="goodsType != null">
+        goods_type,
+      </if>
+      <if test="subType != null">
+        sub_type,
+      </if>
+      <if test="details != null">
+        details,
+      </if>
+      <if test="stock != null">
+        stock,
+      </if>
+      <if test="describes != null">
+        describes,
+      </if>
+
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="goodsid != null">
+        #{goodsid,jdbcType=INTEGER},
+      </if>
+      <if test="goodsname != null">
+        #{goodsname,jdbcType=VARCHAR},
+      </if>
+      <if test="image != null">
+        #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="mallprice != null">
+        #{mallprice,jdbcType=DECIMAL},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="assess != null">
+        #{assess,jdbcType=DECIMAL},
+      </if>
+      <if test="sales != null">
+        #{sales,jdbcType=INTEGER},
+      </if>
+      <if test="goodsType != null">
+        #{goodsType,jdbcType=INTEGER},
+      </if>
+      <if test="subType != null">
+        #{subType,jdbcType=INTEGER},
+      </if>
+      <if test="details != null">
+        #{details,jdbcType=VARCHAR},
+      </if>
+      <if test="stock != null">
+        #{stock,jdbcType=INTEGER},
+      </if>
+      <if test="describes != null">
+        #{describes,jdbcType=VARCHAR},
+      </if>
+
+    </trim>
+
+
+    <selectKey keyProperty="goodsid" order="AFTER" resultType="java.lang.Integer">
+      select LAST_INSERT_ID()
+    </selectKey>
+  </insert>
+
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.vant_demo_success.dataobject.GoodsListDO">
+
+    update goods_list
+    <set>
+      <if test="goodsname != null">
+        goodsName = #{goodsname,jdbcType=VARCHAR},
+      </if>
+      <if test="image != null">
+        image = #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="mallprice != null">
+        mallPrice = #{mallprice,jdbcType=DECIMAL},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="assess != null">
+        assess = #{assess,jdbcType=DECIMAL},
+      </if>
+      <if test="sales != null">
+        sales = #{sales,jdbcType=INTEGER},
+      </if>
+      <if test="goodsType != null">
+        goods_type = #{goodsType,jdbcType=INTEGER},
+      </if>
+      <if test="subType != null">
+        sub_type = #{subType,jdbcType=INTEGER},
+      </if>
+      <if test="details != null">
+        details = #{details,jdbcType=VARCHAR},
+      </if>
+      <if test="stock != null">
+        stock = #{stock,jdbcType=INTEGER},
+      </if>
+      <if test="describes != null">
+        describes = #{describes,jdbcType=VARCHAR},
+      </if>
+
+    </set>
+    where goodsId = #{goodsid,jdbcType=INTEGER}
+  </update>
+
+    <update id="addSales">
+
+        update goods_list
+        <set>
+            <if test="num != null">
+                sales = sales + #{num,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where goodsId = #{goodsid,jdbcType=VARCHAR}
+    </update>
+
+  <update id="updateStock">
+
+    update goods_list
+    <set>
+      <if test="num != null">
+        stock = stock - #{num,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where goodsId = #{goodsid,jdbcType=VARCHAR}
+  </update>
+
+
+
+
+  <update id="updateImagePathById">
+    update goods_list
+    <set>
+      <if test="imgPath != null">
+        image = #{imgPath,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where goodsId = #{goodid,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateDetailById">
+    update goods_list
+    <set>
+      <if test="details != null">
+        details = #{details,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where goodsId = #{goodid,jdbcType=INTEGER}
+  </update>
+
+
+
+    <update id="updateGoodAssess">
+        update goods_list
+        <set>
+            <if test="num != null">
+                assess = (assess * (sales - #{buyNum,jdbcType=INTEGER}) + #{num,jdbcType=INTEGER}*#{buyNum,jdbcType=INTEGER}) / sales
+            </if>
+        </set>
+        where goodsId = #{goodsid,jdbcType=INTEGER}
+    </update>
+
+
+  <update id="updateByPrimaryKey" parameterType="com.example.vant_demo_success.dataobject.GoodsListDO">
+
+    update goods_list
+    set goodsName = #{goodsname,jdbcType=VARCHAR},
+      image = #{image,jdbcType=VARCHAR},
+      mallPrice = #{mallprice,jdbcType=DECIMAL},
+      price = #{price,jdbcType=DECIMAL},
+      assess = #{assess,jdbcType=DECIMAL},
+      sales = #{sales,jdbcType=INTEGER},
+      goods_type = #{goods_type,jdbcType=INTEGER},
+      sub_type = #{subType,jdbcType=INTEGER},
+      details = #{details,jdbcType=VARCHAR},
+      stock = #{stock,jdbcType=INTEGER},
+      describes = #{describes,jdbcType=VARCHAR},
+      where goodsId = #{goodsid,jdbcType=INTEGER}
+  </update>
+</mapper>
